@@ -1,0 +1,9 @@
+//import other scss resources.
+@import "normalize";
+@import "bourbon";
+@import "neat";
+@import "refills";
+
+* {
+  box-sizing: border-box;
+}

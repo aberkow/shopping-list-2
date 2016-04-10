@@ -1,28 +1,30 @@
 /*non-gulp devDependencies*/
-var browserify = require("browserify");
-var critical = require("critical").stream;
-var buffer = require("vinyl-buffer");
-var source = require("vinyl-source-stream");
+var browserify = require("browserify"); //bundle js files together for build
+var critical = require("critical").stream; //create critical path css to inline
+var buffer = require("vinyl-buffer"); //convert streaming vinyl files to use as buffers
+var source = require("vinyl-source-stream"); //use text streams at start of gulp/vinyl pipelines.
 
 /*gulp devDependencies*/
-var gulp = require("gulp");
-var autoprefixer = require("gulp-autoprefixer");
-var clean-css = require("gulp-clean-css");
-var concat = require("gulp-concat");
-var htmlmin = require("gulp-htmlmin");
-var jshint = require("gulp-jshint");
-var rename = require("gulp-rename");
-var sass = require("gulp-sass");
-var uglify = require("gulp-uglify");
+var gulp = require("gulp"); //task manager
+var autoprefixer = require("gulp-autoprefixer"); //prefix css
+var cleanCSS = require("gulp-clean-css"); //minify css
+var concat = require("gulp-concat"); //join files together
+var htmlmin = require("gulp-htmlmin"); //minify html
+var jshint = require("gulp-jshint"); //js linter
+var rename = require("gulp-rename"); //rename files w/o breaking things
+var sass = require("gulp-sass"); //sass transpiler
+var sequence = require("gulp-sequence"); //execute gulp tasks in sequence.
+var uglify = require("gulp-uglify"); //minify js files.
 
 /*task methods*/
-task = {
+tasks = {
   // critical: function(){
   //   return gulp.src("index.html")
   //     .pipe(critical({base: ./, inline: true, css: ["css/"] }))
   // }, ------- try getting critical to work
   html: function(){
     return gulp.src("index.html")
+      .pipe(critical({base: "shopping-list-2/", inline: true, css: ["app/css/stylesheet.css"]}))
       .pipe(htmlmin())
       .pipe(gulp.dest("app/"));
   },
@@ -43,12 +45,13 @@ task = {
       .pipe(source("app.js"))
       .pipe(buffer())
       .pipe(uglify())
-      .pipe(gulp.dest(./app/js));
+      .pipe(gulp.dest("./app/js"));
   },
   styles: function(){
     return gulp.src("css/*.css")
       .pipe(concat("stylesheet.css"))
       .pipe(cleanCSS())
+      .pipe(autoprefixer({browsers: ["last 2 versions"]}))
       .pipe(gulp.dest("app/css"));
   },
   watch: function(){
@@ -57,5 +60,17 @@ task = {
   }
 };
 
-gulp.task("default", ["jshint", "sass", "watch"]);
-//gulp.task()
+/*Individual tasks*/
+gulp.task("html", tasks.html);
+gulp.task("jshint", tasks.jshint);
+gulp.task("sass", tasks.sass);
+gulp.task("scripts", tasks.scripts);
+gulp.task("styles", tasks.styles);
+gulp.task("watch", tasks.watch);
+
+/*Tasks for build process*/
+//default task to watch/lint/transpile js and scss files.
+gulp.task("default", function(cb){sequence("jshint", "sass", "watch", cb); });
+//build task to lint/transpile/concat/minify all files to app folder.
+gulp.task("build", function(cb){sequence("jshint", "sass", "html", "scripts",
+  "styles", cb); });
