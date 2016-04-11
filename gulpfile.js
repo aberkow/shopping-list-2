@@ -26,7 +26,7 @@ tasks = {
   html: function(){
     return gulp.src("index.html")
       //.pipe(critical({base: "shopping-list-2/", inline: true, css: ["app/css/stylesheet.css"]}))
-      .pipe(htmlmin({collapseWhitespace: true}))
+      //.pipe(htmlmin({collapseWhitespace: true}))
       .pipe(gulp.dest("app/"));
   },
   jshint: function(){
@@ -79,7 +79,7 @@ gulp.task("critical", ["build"], function(cb){
   critical.generate({
     inline: true,
     base: "shopping-list-2/",
-    src: "app/index.html",
+    src: "index.html",
     css: ["app/css/stylesheet.css"],
     dest: "app/index.html"
   });

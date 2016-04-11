@@ -28,15 +28,17 @@ list.View = function(elementSelector){
 };
 
 //take itemName from list.Model and display it as a <li> inside .main__list.
-list.View.prototype.renderItem = function(){
-
+list.View.prototype.renderItem = function(itemName){
+  return "<li class='main__list-item'>" + itemName + "</li>";
 };
 
 //link list.Model and list.View
-list.Controller = function(){
+list.Controller = function(model, view){
 
 };
 
 $(document).ready(function(){
-
+  var model = new list.Model();
+  var view = new list.View();
+  var controller = new list.Controller();
 });
