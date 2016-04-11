@@ -4,21 +4,27 @@ var list = {};
 list.Model = function(){
   this.itemName = "";
   this.shoppingList = [];
+  this.numberOfItems = this.shoppingList.length;
 };
 
 //add items to the model.
-list.Model.prototype.addToList = function(){
-
+list.Model.prototype.addToList = function(item){
+  this.itemName = item;
+  if (item !== undefined){
+    this.shoppingList.push(item);
+  }
 };
 
-//remove items from the model.
-list.Model.prototype.removeFromList = function(){
-  
+//remove items from the model. Finds the index in the shoppingList array
+//of the item and removes it.
+list.Model.prototype.removeFromList = function(item){
+  var index = this.shoppingList.indexOf(item);
+  this.shoppingList.splice(index, 1);
 };
 
-//display app data
-list.View = function(){
-
+//display app data as a shopping list
+list.View = function(elementSelector){
+  this.element = document.querySelector(elementSelector);
 };
 
 //take itemName from list.Model and display it as a <li> inside .main__list.
