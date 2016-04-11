@@ -18,10 +18,15 @@ var uglify = require("gulp-uglify"); //minify js files.
 
 /*task methods*/
 tasks = {
+  // critical: function(){
+  //   return gulp.src("index.html")
+  //     .pipe(critical({base: "shopping-list-2/", inline: true}))
+  //     .pipe(gulp.dest("app/index.html"));
+  // },
   html: function(){
     return gulp.src("index.html")
       //.pipe(critical({base: "shopping-list-2/", inline: true, css: ["app/css/stylesheet.css"]}))
-      .pipe(htmlmin())
+      .pipe(htmlmin({collapseWhitespace: true}))
       .pipe(gulp.dest("app/"));
   },
   jshint: function(){
@@ -57,6 +62,7 @@ tasks = {
 };
 
 /*Individual tasks*/
+gulp.task("critical", tasks.critical);
 gulp.task("html", tasks.html);
 gulp.task("jshint", tasks.jshint);
 gulp.task("sass", tasks.sass);
@@ -67,6 +73,18 @@ gulp.task("watch", tasks.watch);
 /*Tasks for build process*/
 //default task to watch/lint/transpile js and scss files.
 gulp.task("default", function(cb){sequence("jshint", "sass", "watch", cb); });
+
+//critical css test
+gulp.task("critical", ["build"], function(cb){
+  critical.generate({
+    inline: true,
+    base: "shopping-list-2/",
+    src: "app/index.html",
+    css: ["app/css/stylesheet.css"],
+    dest: "app/index.html"
+  });
+});
+
 //build task to lint/transpile/concat/minify all files to app folder.
 gulp.task("build", function(cb){sequence("jshint", "sass", "html", "scripts",
   "styles", cb); });
