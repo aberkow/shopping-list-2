@@ -18,13 +18,9 @@ var uglify = require("gulp-uglify"); //minify js files.
 
 /*task methods*/
 tasks = {
-  // critical: function(){
-  //   return gulp.src("index.html")
-  //     .pipe(critical({base: ./, inline: true, css: ["css/"] }))
-  // }, ------- try getting critical to work
   html: function(){
     return gulp.src("index.html")
-      .pipe(critical({base: "shopping-list-2/", inline: true, css: ["app/css/stylesheet.css"]}))
+      //.pipe(critical({base: "shopping-list-2/", inline: true, css: ["app/css/stylesheet.css"]}))
       .pipe(htmlmin())
       .pipe(gulp.dest("app/"));
   },
