@@ -35,9 +35,15 @@ tasks = {
       .pipe(jshint.reporter("default"));
   },
   sass: function(){
+    var includePaths = []
+      .concat(require("node-bourbon").includePaths)
+      // .concat(require("node-neat").includePaths)
+      // .concat(require("node-refills").includePaths);
+
     return gulp.src("scss/*.scss")
-      .pipe(sass({includePaths: require("node-bourbon", "node-neat", "node-refills")
-        .includePaths, includePaths: require('node-neat').includePaths, includePaths: require("node-refills").includePaths}))
+      .pipe(sass({includePaths: includePaths}))
+      // .pipe(sass({includePaths: require("node-bourbon", "node-neat", "node-refills")
+      //   .includePaths, includePaths: require('node-neat').includePaths, includePaths: require("node-refills").includePaths}))
       .pipe(gulp.dest("css"));
   },
   scripts: function(){

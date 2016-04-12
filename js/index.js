@@ -23,13 +23,14 @@ list.Model.prototype.deleteItemFromList = function(item){
 };
 
 //display app data as a shopping list
-list.View = function(elementSelector){
-  this.element = document.querySelector(elementSelector);
-  this.element.addEventListener("click", /*??????????*/);
+list.View = function(listSelector, buttonSelector){
+  this.listSelector = document.querySelector(listSelector);
+  this.buttonSelector.addEventListener("click", this._renderItemInView.bind(this));
+  this.renderItemInView = null;
 };
 
 //take itemName from list.Model and display it as a <li> inside .main__list.
-list.View.prototype.renderItemInView = function(itemName){
+list.View.prototype._renderItemInView = function(itemName){
   return "<li class='main__list-item'>" + itemName + "</li>";
 };
 
@@ -49,6 +50,6 @@ list.Controller = function(model, view){
 
 $(document).ready(function(){
   var model = new list.Model();
-  var view = new list.View();
+  var view = new list.View("main__list", "main__form-button");
   var controller = new list.Controller(model, view);
 });
