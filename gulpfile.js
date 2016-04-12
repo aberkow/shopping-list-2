@@ -37,7 +37,7 @@ tasks = {
   sass: function(){
     return gulp.src("scss/*.scss")
       .pipe(sass({includePaths: require("node-bourbon", "node-neat", "node-refills")
-        .includePaths}))
+        .includePaths, includePaths: require('node-neat').includePaths, includePaths: require("node-refills").includePaths}))
       .pipe(gulp.dest("css"));
   },
   scripts: function(){
