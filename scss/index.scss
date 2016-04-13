@@ -2,10 +2,9 @@
 @import "normalize";
 @import "bourbon";
 @import "neat";
-@import "refills";
+//@import "refills"; this can't be imported? It seems to be a collection
+//that doesn't get this treatment?
 
 * {
   box-sizing: border-box;
 }
-
-//test

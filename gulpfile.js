@@ -1,6 +1,6 @@
 /*non-gulp devDependencies*/
 var browserify = require("browserify"); //bundle js files together for build
-var critical = require("critical").stream; //create critical path css to inline
+var criticalCSS = require("critical").stream; //create critical path css to inline
 var buffer = require("vinyl-buffer"); //convert streaming vinyl files to use as buffers
 var source = require("vinyl-source-stream"); //use text streams at start of gulp/vinyl pipelines.
 
@@ -19,8 +19,8 @@ var uglify = require("gulp-uglify"); //minify js files.
 /*task methods*/
 tasks = {
   // critical: function(){
-  //   return gulp.src("index.html")
-  //     .pipe(critical({base: "shopping-list-2/", inline: true}))
+  //   return gulp.src("shopping-list-2/index.html")
+  //     .pipe(critical({base: "shopping-list-2/", inline: true, css: ["shopping-list-2/app/css/stylesheet.css"]}))
   //     .pipe(gulp.dest("app/index.html"));
   // },
   html: function(){
@@ -37,13 +37,11 @@ tasks = {
   sass: function(){
     var includePaths = []
       .concat(require("node-bourbon").includePaths)
-      // .concat(require("node-neat").includePaths)
-      // .concat(require("node-refills").includePaths);
+      .concat(require("node-neat").includePaths)
+      .concat(require("node-refills").includePaths);
 
     return gulp.src("scss/*.scss")
       .pipe(sass({includePaths: includePaths}))
-      // .pipe(sass({includePaths: require("node-bourbon", "node-neat", "node-refills")
-      //   .includePaths, includePaths: require('node-neat').includePaths, includePaths: require("node-refills").includePaths}))
       .pipe(gulp.dest("css"));
   },
   scripts: function(){
@@ -68,7 +66,7 @@ tasks = {
 };
 
 /*Individual tasks*/
-gulp.task("critical", tasks.critical);
+//gulp.task("critical", tasks.critical);
 gulp.task("html", tasks.html);
 gulp.task("jshint", tasks.jshint);
 gulp.task("sass", tasks.sass);
@@ -80,16 +78,21 @@ gulp.task("watch", tasks.watch);
 //default task to watch/lint/transpile js and scss files.
 gulp.task("default", function(cb){sequence("jshint", "sass", "watch", cb); });
 
-//critical css test
-gulp.task("critical", ["build"], function(cb){
-  critical.generate({
-    inline: true,
-    base: "shopping-list-2/",
-    src: "index.html",
-    css: ["app/css/stylesheet.css"],
-    dest: "app/index.html"
-  });
-});
+//critical css test ------- STILL ENDS UP WITH FATAL undefined AT THE END OF THE TASK.
+
+// gulp.task("critical", ["build"], function(cb){
+//   return gulp.src("index.html")
+//     .pipe(criticalCSS({base:"shopping-list-2/", inline: true, css:["app/css/stylesheet.css"]}))
+//     .pipe(gulp.dest("app"));
+//
+//   // critical.generate({
+//   //   inline: true,
+//   //   base: "shopping-list-2/",
+//   //   src: "index.html",
+//   //   css: ["app/css/stylesheet.css"],
+//   //   dest: "app/index.html"
+//   // });
+// });
 
 //build task to lint/transpile/concat/minify all files to app folder.
 gulp.task("build", function(cb){sequence("jshint", "sass", "html", "scripts",
