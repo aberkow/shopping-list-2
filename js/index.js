@@ -2,7 +2,7 @@ var list = {};
 
 //store and manipulate app data
 list.Model = function(){
-  this.itemName = "";
+  //this.itemName = "";
   this.shoppingList = [];
   this.numberOfItems = this.shoppingList.length;
 };
@@ -24,9 +24,11 @@ list.Model.prototype.deleteItemFromList = function(item){
 
 //display app data as a shopping list
 list.View = function(listSelector, buttonSelector){
-  this.listSelector = document.querySelector(listSelector);
+  this.listSelector = $.listSelector;
+  this.buttonSelector = $.buttonSelector;
   this.buttonSelector.addEventListener("click", this._renderItemInView.bind(this));
   this.renderItemInView = null;
+  this.removeItemFromView = null;
 };
 
 //take itemName from list.Model and display it as a <li> inside .main__list.
@@ -35,7 +37,7 @@ list.View.prototype._renderItemInView = function(itemName){
 };
 
 //take item closest to selected trashcan and remove the entry from the view
-list.View.prototype.removeItemFromView = function(evt){
+list.View.prototype._removeItemFromView = function(evt){
   var item = evt.target;
   item.closest("main__list-item").remove();
 };
@@ -47,6 +49,8 @@ list.Controller = function(model, view){
   model.addToList = view.renderItemInView.bind(view);
   model.deleteItemFromList = view.removeItemFromView.bind(view);
 };
+
+
 
 $(document).ready(function(){
   var model = new list.Model();
