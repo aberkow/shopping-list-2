@@ -12,24 +12,24 @@ $(document).ready(function(){
 list.Model = function(){
   this.itemName = "";
   this.shoppingList = [];
-  //this.addToList = null;
-  //this.itemStatus = null;
+  this.itemStatus = null;
   console.log("model");
 };
 
 //add items to the model.
 list.Model.prototype.addToList = function(item){
-  this.itemName = item;
+  this.itemName = item.itemName;
   if (item !== undefined){
     this.shoppingList.push(item);
   }
-  debugger;
+  //debugger;
   console.log("model.addToList");
+  debugger;
   console.log(item);
 };
 
 list.Model.prototype.itemStatus = function(){
-  //something here about whether the item has been checked or not.
+  //something here about whether the item has been checked or not and change its status.
 };
 
 list.Model.prototype.itemEdit = function(){
