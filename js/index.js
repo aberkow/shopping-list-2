@@ -1,9 +1,12 @@
 var list = {};
+var model;
+var view;
+var controller;
 
 $(document).ready(function(){
-  var model = new list.Model();
-  var view = new list.View("main__form", "main__list");
-  var controller = new list.Controller(model, view);
+  model = new list.Model();
+  view = new list.View();
+  controller = new list.Controller(model, view);
   debugger;
 });
 
@@ -50,25 +53,25 @@ list.Model.prototype.deleteItemFromList = function(item){
 
 //display app data as a shopping list
 
-list.FormView = function(formSelector){
-  this.formSelector = $(formSelector);
-  this.ItemName = $(formSelector).find('input').val();
-}
+// list.FormView = function(formSelector){
+//   this.formSelector = $(formSelector);
+//   this.ItemName = $(formSelector).find('input').val();
+// }
 
-list.View = function(formSelector, listSelector){
-  this.listSelector = $(listSelector);
-  this.formSelector = $(formSelector);
-  this.itemName = $(formSelector).find('input').val();
+list.View = function(){
+  this.listSelector = $('#main__list');
+  this.formSelector = $('.main__form');
+  this.itemName = this.formSelector.find('input').val();
   this.renderItemInView = null; //do I even need these two lines???
   this.removeItemFromView = null;
-  this.listeners = {};
+  this.listeners = {}; //see rlynch's comments in evernote
   console.log("view");
 };
 
-list.View.prototype.addListener(type, callback){
-  var listeners = this.listeners[type] = this.listeners[type] || [];
-  listeners.push(callback);
-}
+// list.View.prototype.addListener(type, callback){
+//   var listeners = this.listeners[type] = this.listeners[type] || [];
+//   listeners.push(callback);
+// }
 
 //take itemName from list.Model and display it as a <li> inside .main__list.
 list.View.prototype.renderItemInView = function(itemName){//needs an evt here?
@@ -78,7 +81,7 @@ list.View.prototype.renderItemInView = function(itemName){//needs an evt here?
     listeners.forEach(function(listener){
       listener(itemName);
     });
-  }
+  };
   this.formSelector.on("submit", function(evt){
     evt.preventDefault();
     //this.renderItemInView.bind(this);
