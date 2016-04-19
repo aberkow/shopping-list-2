@@ -1,51 +1,42 @@
 var list = {};
 var model;
-var view;
+var inputView;
+var listView;
 var controller;
 
-$(document).ready(function(){
-  model = new list.Model();
-  view = new list.View();
-  controller = new list.Controller();
-  $('.main__form-button').on('click', model.addToListModel.bind(model));
-  $('.main__form-button').on('click', view.addToListView.bind(view));
-
-
-
-  // $('.main__form-button').on('click', function(){
-  //   //alert('yay');
-  //
-  // });
-});
-
+//handles the data for the list (e.g. itemName, shoppingListArr)
 list.Model = function(){
   this.itemName = '';
-  this.shoppingList = [];
+  this.shoppingListArr = [];
 };
 
-list.View = function(){
-  this.formSelector = $('.main__form');
-  this.listSelector = $('.main__list');
-  this.item = this.formSelector.find('input').val();
+list.Model.prototype.storeListItem = function(value){
+  this.itemName = value;
 };
 
-list.Controller = function(){
-
+//the view just for the input form (input box and add button)
+//elementID = the id of the form?
+list.InputView = function(element, initialValue){
+  this.element = $(element);//the selector for the form element
+  this.element.addEventListener('main__form', this._onSubmit.bind(this));//add an event listener to it
+  this.setValue(initialValue || '');//an initialValue for the form
+  this.addItemToList = null;
 };
 
-list.Model.prototype.addToListModel = function(evt){
-  evt.preventDefault();
-  this.itemName = $('.main__form-input').val();
-  console.log(this.itemName);
-  if (this.itemName !== undefined){
-    this.shoppingList.push(this.itemName);
+//when the form is submitted, get the value of the input box and send it to the model via the controller.
+list.InputView.prototype._onSubmit = function(evt){
+  var value = evt.target.value();
+  if (this.addItemToList){
+    this.addItemToList(value);
   }
-  console.log(this.shoppingList);
 };
 
-list.View.prototype.addToListView = function(evt){
-  evt.preventDefault();
-  var item = this.item;
-  this.listSelector.append("<li class='main__list-item'>" + item + "</li>");
-  return item;
-}
+//view just for the contents of the ul
+list.ListView = function(){
+
+};
+
+//cross link the model and view together
+list.Controller = function(){
+  inputView.addItemToList = model.
+};
