@@ -29,7 +29,6 @@ list.Model.prototype.storeListItem = function(value){
   if (value!== undefined){
     this.shoppingListArr.push(value);
   }
-  console.log(this);
 };
 
 //the view just for the input form (input box and add button)
@@ -82,7 +81,7 @@ list.ListView.prototype._onSubmit = function(evt){
 
 list.ListView.prototype.renderItem = function(item){
   this.listItem = item;
-  this.element.append("<li class='main__list-item'>" + item + "</li>");
+  this.element.append("<li class='main__list-item'>" + item + "<span class='main__list-item--edit'>" + "<button class='main__list-item--button'>" + "Edit" + "</button>" + "</span>" + "<span class='main__list-item--delete'>" + "<button class='main__list-item--button'>" + "Delete" + "</button>" + "</span>" + "</li>");
 };
 
 //cross link the model and view together
