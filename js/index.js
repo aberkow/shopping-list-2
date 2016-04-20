@@ -7,9 +7,8 @@ var controller;
 $(document).ready(function(){
   model = new list.Model();
   formView = new list.FormView('.main__form');
-  listView = new list.ListView();
+  listView = new list.ListView('.main__list');
   controller = new list.Controller(model, formView, listView);
-  debugger;
 });
 
 
@@ -21,20 +20,17 @@ list.Model = function(){
   console.log('model');
 };
 
+list.Model.prototype.newListItem = function(item){
+  this.itemName = item;
+};
+
 list.Model.prototype.storeListItem = function(value){
   this.itemName = value;
-  if (value !== undefined){
+  if (value!== undefined){
     this.shoppingListArr.push(value);
   }
   console.log(this);
 };
-
-// list.Model.prototype.addToShoppingList = function(value){
-//   if (value !== undefined){
-//     this.shoppingListArr.push(value);
-//   }
-//   console.log(value);
-// }
 
 //the view just for the input form (input box and add button)
 //elementID = the id of the form?
@@ -53,6 +49,7 @@ list.FormView.prototype._onSubmit = function(evt){
   var item = this.element.find('input').val();
   if (this.addItemToList){
     this.addItemToList(item);
+    //this.renderItem(item);
   }
 };
 
@@ -64,8 +61,23 @@ list.FormView.prototype.addItemToList = function(item){
 list.ListView = function(element){
   this.listItem = '';
   this.element = $(element);
-  //this.renderItem = null;
+  /*attach an event listener to the form from here by DOM traversal. .siblings() goes up the tree to the element w the same name as the filter.*/
+  this.sibling = this.element.siblings('form');
+  //in this case 'this' is listView at the beginning, and 'formView' at the end.
+  this.sibling.submit(this.element, (this._onSubmit.bind(this)));
   console.log('listView');
+};
+
+//listView event listener right now - console.log('click') = good, but item doesn't render.
+list.ListView.prototype._onSubmit = function(evt){
+  evt.preventDefault();
+  var item = this.sibling.find('input').val();
+  this.listItem = item;
+  if (this.renderItem){
+    this.renderItem(item);
+  }
+  debugger;
+  console.log('click');
 };
 
 list.ListView.prototype.renderItem = function(item){
@@ -76,6 +88,6 @@ list.ListView.prototype.renderItem = function(item){
 //cross link the model and view together
 list.Controller = function(model, formView, listView){
   formView.addItemToList = model.storeListItem.bind(model);
-  model.storeListItem = listView.renderItem.bind(listView);
+  model.newListItem = listView.renderItem.bind(listView);
   console.log('controller');
 };
