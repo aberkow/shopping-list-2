@@ -9,6 +9,7 @@ $(document).ready(function(){
   formView = new list.FormView('.main__form');
   listView = new list.ListView();
   controller = new list.Controller(model, formView, listView);
+  debugger;
 });
 
 
@@ -16,33 +17,38 @@ $(document).ready(function(){
 list.Model = function(){
   this.itemName = '';
   this.shoppingListArr = [];
-  this.storeListItem = null;
+  //this.storeListItem = null;
+  console.log('model');
 };
 
 list.Model.prototype.storeListItem = function(value){
   this.itemName = value;
-  // if (value !== undefined){
-  //   this.shoppingListArr.push(value);
-  // }
-};
-
-list.Model.prototype.addToShoppingList = function(value){
   if (value !== undefined){
     this.shoppingListArr.push(value);
   }
-}
+  console.log(this);
+};
+
+// list.Model.prototype.addToShoppingList = function(value){
+//   if (value !== undefined){
+//     this.shoppingListArr.push(value);
+//   }
+//   console.log(value);
+// }
 
 //the view just for the input form (input box and add button)
 //elementID = the id of the form?
 list.FormView = function(element, initialValue){
   this.element = $(element);//the selector for the form element
-  this.element.addEventListener('main__form', this._onSubmit.bind(this));//add an event listener to it
+  this.element.submit(this.element, this._onSubmit.bind(this));//add an event listener to it
   this.addItemToList(initialValue || '');//an initialValue for the form
-  this.addItemToList = null;
+  //this.addItemToList = null;
+  console.log('formView');
 };
 
 //when the form is submitted, get the value of the input box and send it to the model via the controller.
 list.FormView.prototype._onSubmit = function(evt){
+  //var value = evt.target.value();
   evt.preventDefault();
   var item = this.element.find('input').val();
   if (this.addItemToList){
@@ -58,7 +64,8 @@ list.FormView.prototype.addItemToList = function(item){
 list.ListView = function(element){
   this.listItem = '';
   this.element = $(element);
-  this.renderItem = null;
+  //this.renderItem = null;
+  console.log('listView');
 };
 
 list.ListView.prototype.renderItem = function(item){
@@ -69,5 +76,6 @@ list.ListView.prototype.renderItem = function(item){
 //cross link the model and view together
 list.Controller = function(model, formView, listView){
   formView.addItemToList = model.storeListItem.bind(model);
-  model.addToShoppingList = listView.renderItem.bind(listView);
+  model.storeListItem = listView.renderItem.bind(listView);
+  console.log('controller');
 };
