@@ -64,6 +64,10 @@ list.ListView = function(element){
   this.sibling = this.element.siblings('form');
   //in this case 'this' is listView at the beginning, and 'formView' at the end.
   this.sibling.submit(this.element, (this._onSubmit.bind(this)));
+  this.li = this.element.children();
+  this.li.click(this.li, (this._onClickDelete.bind(this)));
+
+  //this.element.click(this.li, (this._onClickDelete.bind(this)));
   console.log('listView');
 };
 
@@ -75,13 +79,32 @@ list.ListView.prototype._onSubmit = function(evt){
   if (this.renderItem){
     this.renderItem(item);
   }
-  debugger;
+  //debugger;
   console.log('click');
 };
 
 list.ListView.prototype.renderItem = function(item){
   this.listItem = item;
   this.element.append("<li class='main__list-item'>" + item + "<span class='main__list-item--edit'>" + "<button class='main__list-item--button'>" + "Edit" + "</button>" + "</span>" + "<span class='main__list-item--delete'>" + "<button class='main__list-item--button'>" + "Delete" + "</button>" + "</span>" + "</li>");
+};
+
+list.ListView.prototype._onClickDelete = function(evt){
+  evt.preventDefault();
+  var deleteButton = evt.target;
+  this.li = deleteButton.closest('li');
+  if (this.deleteItem){
+    this.deleteItem(item);
+  }
+  debugger;
+  console.log('delete');
+};
+
+//this function is coming up with the wrong item as the argument...
+list.ListView.prototype.deleteItem = function(item){
+  //var item =
+  var item = this.li.text();
+  this.li.remove(item);
+  debugger;
 };
 
 //cross link the model and view together
